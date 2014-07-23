@@ -10,7 +10,7 @@ FfNode* ff_create_op_node(enum ff_op_type op_type)
   FfNode *node = malloc(sizeof(FfNode));
   node->nd_type = nd_op;
   node->nd_op_val = op_type;
-  node->leftmost = node->next = NULL;
+  node->child = node->next = NULL;
   return node;
 }
 
@@ -19,7 +19,7 @@ FfNode* ff_create_arg_node(char *arg_name)
   FfNode *node = malloc(sizeof(FfNode));
   node->nd_type = nd_arg;
   node->nd_arg_val = arg_name;
-  node->leftmost = node->next = NULL;
+  node->child = node->next = NULL;
   return node;
 }
 
@@ -37,6 +37,6 @@ FfNode* ff_link_sibling(FfNode *leftmost, FfNode *right)
 FfNode* ff_link_child(FfNode *parent, FfNode *child)
 {
   assert(parent != NULL && child != NULL);
-  parent->leftmost = child;
+  parent->child = child;
   return parent;
 }

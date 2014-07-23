@@ -45,6 +45,9 @@ list
   : '(' op args ')' {
     $$ = ff_link_child($2, $3);
   }
+  |
+  '(' ')' {
+  }
 ;
 
 args
@@ -55,6 +58,7 @@ args
   | args ID {
     FfNode *right_node = ff_create_arg_node($2);
     $$ = ff_link_sibling($1, right_node);
+    dbg_info("%s ", right_node->nd_arg_val);
   }
   | args list {
     $$ = ff_link_sibling($1, $2);
@@ -64,24 +68,31 @@ args
 op
   : QUOTE {
     $$ = ff_create_op_node(op_quote);
+    dbg_info("quote ");
   }
   | ATOM {
     $$ = ff_create_op_node(op_atom);
+    dbg_info("atom ");
   }
   | EQ {
     $$ = ff_create_op_node(op_eq);
+    dbg_info("eq ");
   }
   | CAR {
     $$ = ff_create_op_node(op_car);
+    dbg_info("car ");
   } 
   | CDR {
     $$ = ff_create_op_node(op_cdr);
+    dbg_info("cdr ");
   }
   | CONS  {
     $$ = ff_create_op_node(op_cons);
+    dbg_info("cons ");
   }
   | COND  {
     $$ = ff_create_op_node(op_cond);
+    dbg_info("cond ");
   }
 ;
 

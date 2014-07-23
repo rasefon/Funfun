@@ -7,10 +7,16 @@
 
 %option noyywrap yylineno
 
-ID  [a-zA-Z_+=~!@#$%&*\\\-\^]+
+ID  [a-zA-Z_+=~!@#$%&*"\\\-\^]+
 %%
-"("       { return '('; }
-")"       { return ')'; }
+"("       { 
+  dbg_info("( ");
+  return '('; 
+}
+")"       { 
+  dbg_info(") ");
+  return ')'; 
+}
 "quote"   { return QUOTE; }
 "atom"    { return ATOM; }
 "eq"      { return EQ; }
@@ -19,8 +25,21 @@ ID  [a-zA-Z_+=~!@#$%&*\\\-\^]+
 "cons"    { return CONS; }
 "cond"    { return COND; }
 {ID}      {
+  dbg_info("%s ", yytext);
   yylval.str_val = strdup(yytext);
   return ID;
           }
+[ \t] {
+  dbg_info("blank ");
+}
+
+[\r\n]+ {
+  dbg_info("\n");
+}
+
+. {
+  dbg_info("?: ", yytext);
+}
+
 %%
 

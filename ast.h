@@ -1,6 +1,14 @@
 #ifndef AST_H
 #define AST_H
 
+#define RDEBUG
+
+#ifdef RDEBUG
+#define dbg_info printf
+#else
+#define dbg_info
+#endif
+
 enum ff_node_type {
   nd_op = 1,
   nd_arg
@@ -23,7 +31,7 @@ typedef struct FfNode {
     char *arg_val;
   } nd_val;
 
-  struct FfNode *leftmost;
+  struct FfNode *child;
   struct FfNode *next;
 } FfNode;
 

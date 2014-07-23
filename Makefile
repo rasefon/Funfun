@@ -6,7 +6,7 @@ Includes = \
 $(Target): $(Objects)
 	$(CC) -o $(Target) $(Objects)
 
-main.o: st.h
+main.o: ast.h ast.c ff.h ff.c
 	$(CC) -c main.c
 
 y.tab.h: Funfun.y ast.h ast.c ff.h ff.c
