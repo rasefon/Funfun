@@ -10,11 +10,13 @@
 
 (atom (quote ()))
 
-(eq (atom a) (atom a))
+(eq (quote a) (quote a))
 
-(eq (atom b) (atom b))
+(eq (quote a) (quote b))
 
-(eq (atom ()) (atom ()))
+(eq (quote ()) (quote ()))
+
+(eq (quote (a b)) (quote (a b)))
 
 (car (quote (a b c)))
 
@@ -22,14 +24,9 @@
 
 (cons (quote a) (quote (b c)))
 
-(cons (quote a) 
-      (cons (quote b) 
-            (cons (quote c) 
-                  (quote ()))))
+(car (cons (quote a) (quote (b c))))
 
-(car (cons (quote a) (quote b c)))
-
-(cdr (cons (quote a) (quote b c)))
+(cdr (cons (quote a) (quote (b c))))
 
 (cond
   ((eq (quote a) (quote b))
