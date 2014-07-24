@@ -5,38 +5,53 @@
 #include "ast.h"
 #include "st.h"
 
-FfNode* ff_create_op_node(enum ff_op_type op_type)
+FfNode* ff_create_op_node(enum ff_op_type type)
 {
   FfNode *node = malloc(sizeof(FfNode));
-  node->nd_type = nd_op;
-  node->nd_op_val = op_type;
-  node->child = node->next = NULL;
+  node->type = node_op;
+  node->node_val_op = type;
+  node->is_empty = false;
   return node;
 }
 
-FfNode* ff_create_arg_node(char *arg_name)
+FfNode* ff_create_id_node(char *id_name)
 {
+  assert(!!id_name);
+
   FfNode *node = malloc(sizeof(FfNode));
-  node->nd_type = nd_arg;
-  node->nd_arg_val = arg_name;
-  node->child = node->next = NULL;
+  node->type = node_id;
+  node->node_val_id = id_name;
+  node->is_empty = false;
   return node;
 }
 
-FfNode* ff_link_sibling(FfNode *leftmost, FfNode *right)
+FfNode* ff_create_list_node(FfNode *list)
 {
-  assert(leftmost != NULL && right != NULL);
-  FfNode *left = leftmost;
-  while (left->next) {
-    left = left->next;
+  assert(!!list);
+
+  FfNode *node = malloc(sizeof(FfNode));
+  node->type = node_list;
+  node->node_val_list = list;
+  node->is_empty = false;
+  return node;
+}
+
+FfNode* ff_create_empty_node()
+{
+  FfNode *node = malloc(sizeof(FfNode));
+  node->is_empty = true;
+  return node;
+}
+
+FfNode* ff_link_node(FfNode *left, FfNode *right)
+{
+  assert(!!left && !!right);
+
+  FfNode *curr_tail = left;
+  while(curr_tail->next) {
+    curr_tail = curr_tail->next;
   }
-  left->next = right;
-  return leftmost;
-}
+  curr_tail->next = right;
 
-FfNode* ff_link_child(FfNode *parent, FfNode *child)
-{
-  assert(parent != NULL && child != NULL);
-  parent->child = child;
-  return parent;
+  return left;
 }

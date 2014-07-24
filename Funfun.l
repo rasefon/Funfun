@@ -25,12 +25,12 @@ ID  [a-zA-Z_+=~!@#$%&*"\\\-\^]+
 "cons"    { return CONS; }
 "cond"    { return COND; }
 {ID}      {
-  dbg_info("%s ", yytext);
   yylval.str_val = strdup(yytext);
+  dbg_info("%s ", yylval.str_val);
   return ID;
           }
 [ \t] {
-  dbg_info("blank ");
+  /*dbg_info(" BK ");*/
 }
 
 [\r\n]+ {
@@ -38,7 +38,7 @@ ID  [a-zA-Z_+=~!@#$%&*"\\\-\^]+
 }
 
 . {
-  dbg_info("?: ", yytext);
+  dbg_info("???: ", strdup(yytext));
 }
 
 %%

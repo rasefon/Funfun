@@ -16,7 +16,8 @@ void ff_set_interpreter(Interpreter *interpreter)
 
 Stmts* ff_create_stmts(FfNode *list)
 {
-  assert(list != NULL);
+  assert(!!list);
+
   Stmts *s = malloc(sizeof(Stmts));
   s->list = list;
   return s;
@@ -24,12 +25,14 @@ Stmts* ff_create_stmts(FfNode *list)
 
 Stmts* ff_link_stmts(Stmts *head, FfNode *nd)
 {
-  assert(head != NULL && nd != NULL);
+  assert(!!head && !!nd);
+
   Stmts *new_s = malloc(sizeof(Stmts));
+  new_s->list = nd;
   Stmts *s = head;
   while(s->next) {
     s = s->next;
   }
   s->next = new_s;
-  return s;
+  return head;
 }

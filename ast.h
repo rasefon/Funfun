@@ -1,7 +1,9 @@
 #ifndef AST_H
 #define AST_H
+#include <stdbool.h>
+#include <stddef.h>
 
-#define RDEBUG
+//#define RDEBUG
 
 #ifdef RDEBUG
 #define dbg_info printf
@@ -10,8 +12,9 @@
 #endif
 
 enum ff_node_type {
-  nd_op = 1,
-  nd_arg
+  node_op = 1,
+  node_id,
+  node_list
 };
 
 enum ff_op_type {
@@ -25,22 +28,27 @@ enum ff_op_type {
 };
 
 typedef struct FfNode {
-  unsigned short nd_type;
-  union {
-    unsigned long op_type;
-    char *arg_val;
-  } nd_val;
+  bool is_empty;
+  enum ff_node_type type;
 
-  struct FfNode *child;
-  struct FfNode *next;
+  union {
+    enum ff_op_type op_type;
+    char *id_name;
+    struct FfNode *list;
+  } node_val;
+
+  struct FfNode* next;
+
 } FfNode;
 
-#define nd_arg_val     nd_val.arg_val
-#define nd_op_val       nd_val.op_type
+#define node_val_id         node_val.id_name
+#define node_val_op         node_val.op_type
+#define node_val_list       node_val.list
 
-FfNode* ff_create_op_node(enum ff_op_type op_type);
-FfNode* ff_create_arg_node(char *arg_name);
-FfNode* ff_link_sibling(FfNode *leftmost, FfNode *right);
-FfNode* ff_link_child(FfNode *parent, FfNode *child);
+FfNode* ff_create_op_node(enum ff_op_type type);
+FfNode* ff_create_id_node(char *id_name);
+FfNode* ff_create_list_node(FfNode *list);
+FfNode* ff_create_empty_node();
+FfNode* ff_link_node(FfNode *left, FfNode *right);
 
 #endif
