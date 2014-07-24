@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ff.h"
 
 extern FILE *yyin;
@@ -16,19 +17,22 @@ void print_list(FfNode *root_nd)
 
   FfNode* curr_nd = root_nd;
 
-  if (curr_nd->is_empty) {
-    printf(" nil ");
+  if (curr_nd->is_empty && curr_nd->type != node_bool) {
+    printf("nil ");
     return;
   }
 
   if (curr_nd->type != node_list) {
     if (curr_nd->type == node_op) {
       /*printf(" op: %s", g_op_type_arr[curr_nd->node_val_op]);*/
-      printf("%s ", g_op_type_arr[curr_nd->node_val_op]);
+      printf("op:%s\t", g_op_type_arr[curr_nd->node_val_op]);
+    }
+    else if(curr_nd->type == node_id) {
+      printf("id:%s\t", curr_nd->node_val_id);
     }
     else {
-      /*printf(" id: %s", curr_nd->node_val_id);*/
-      printf("%s ", curr_nd->node_val_id);
+      // bool type
+      printf("bool:%s\t", curr_nd->node_val_bool ? "T" : "F");
     }
 
     if (curr_nd->next) {
@@ -91,7 +95,7 @@ FfNode* eval_list(FfNode *root)
     switch (curr_nd->node_val_op) {
       case op_quote:
         {
-          if (next_nd != NULL) {
+          if (!!next_nd) {
             if (next_nd->type == node_op) {
               fprintf(stderr, "quote shouldn't use operator as parameter.\n");
               exit(-1);
@@ -112,8 +116,10 @@ FfNode* eval_list(FfNode *root)
               }
               else {
 
-                FfNode *sub_node = next_nd->node_val_list;
-                result = ff_copy_node(sub_node);
+                FfNode *sub_node = ff_copy_node(next_nd->node_val_list);
+                result = ff_create_list_node(sub_node);
+                /*debug*/
+                /*printf("result type:%d\n", result->type);*/
                 while (sub_node->next) {
                   sub_node = sub_node->next;
                   FfNode *tmp_node = ff_copy_node(sub_node);
@@ -137,9 +143,11 @@ FfNode* eval_list(FfNode *root)
               FfNode *tmp = eval_list(next_nd);
               assert(!!tmp);
 
-              result = ff_create_empty_node();
               if(tmp->is_empty || tmp->type != node_list) {
-                result->is_empty = true;
+                result = ff_create_bool_node(true);
+              }
+              else {
+                result = ff_create_bool_node(false);
               }
 
               return result;
@@ -193,10 +201,10 @@ FfNode* eval_list(FfNode *root)
 
 int main(int argc, char **argv)
 {
-  extern int yydebug;
+  /*extern int yydebug;*/
   /*yydebug = 1;*/
 
-  if (argc != 2) {
+  if (argc != 2 && argc != 3) {
     fprintf(stderr, "Usage: \n");
     fprintf(stderr, "arg1: lisp file name.\n");
     return -1;
@@ -220,13 +228,15 @@ int main(int argc, char **argv)
     fprintf(stdout, "Succeeded to parse file %s\n", argv[1]);
   }
 
-  //test
-  /*printf("%p, %p\n", g_inter, g_inter->progm);*/
-  /*print_tree(g_inter->progm);*/
-  print_eval_results(g_inter->progm);
+  if (argc == 3 && 0 == strcmp(argv[2], "/dt")) {
+    print_tree(g_inter->progm);
+  }
+  else {
+    print_eval_results(g_inter->progm);
+  }
 
   free(g_inter);
 
-  fcloseall();
+  fclose(yyin);
   return 0;
 }

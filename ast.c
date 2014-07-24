@@ -78,3 +78,12 @@ FfNode* ff_copy_node(FfNode *src)
 
   return dest;
 }
+
+FfNode* ff_create_bool_node(bool is_true)
+{
+  FfNode *node = ff_create_empty_node();
+  node->type = node_bool;
+  node->node_val_bool = is_true;
+  return node;
+}
+
