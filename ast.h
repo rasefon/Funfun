@@ -50,5 +50,6 @@ FfNode* ff_create_id_node(char *id_name);
 FfNode* ff_create_list_node(FfNode *list);
 FfNode* ff_create_empty_node();
 FfNode* ff_link_node(FfNode *left, FfNode *right);
+FfNode* ff_copy_node(FfNode *src);
 
 #endif
