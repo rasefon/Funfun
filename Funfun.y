@@ -29,7 +29,6 @@ static int s_dbg_count = 0;
 
 progm
   : stmts {
-    dbg_info("\nprogm?\n");
     Interpreter *inter = ff_get_interpreter();
     inter->progm = $1;
   }
@@ -58,22 +57,22 @@ list
 
 elems
   : op {
-    /*dbg_info("\n[op:%s]~%d\n", $1, s_dbg_count++);*/
+    dbg_info("\t[op:%s]~%d\n", $1, s_dbg_count++);
   }
   | ID {
-    /*dbg_info("\n[id:%s]~%d\n", $1, s_dbg_count++);*/
+    dbg_info("\t[id:%s]~%d\n", $1, s_dbg_count++);
     $$ = ff_create_id_node($1); 
   }
   | list {
-    /*dbg_info("\n[list]~%d\n", s_dbg_count++);*/
+    dbg_info("\t[list]~%d\n", s_dbg_count++);
   }
   | elems ID {
-    /*dbg_info("\n[elems id:%s]~%d\n",$2, s_dbg_count++);*/
+    dbg_info("\t[elems id:%s]~%d\n",$2, s_dbg_count++);
     FfNode *node = ff_create_id_node($2); 
     $$ = ff_link_node($1, node);
   }
   | elems list {
-    /*dbg_info("\n[elems list]~%d\n", s_dbg_count++);*/
+    dbg_info("\t[elems list]~%d\n", s_dbg_count++);
     $$ = ff_link_node($1, $2);
   }
 ;

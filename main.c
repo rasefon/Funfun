@@ -19,14 +19,14 @@ void print_list(FfNode *root_nd)
   FfNode* curr_nd = root_nd;
 
   if (curr_nd->is_empty && curr_nd->type != node_bool) {
-    printf("nil ");
+    printf(" nil\t");
     return;
   }
 
   if (curr_nd->type != node_list) {
     if (curr_nd->type == node_op) {
       if (s_dt) {
-        printf("op:%s\t", g_op_type_arr[curr_nd->node_val_op]);
+        printf(" op:%s\t", g_op_type_arr[curr_nd->node_val_op]);
       }
       else {
         printf("%s ", g_op_type_arr[curr_nd->node_val_op]);
@@ -34,7 +34,7 @@ void print_list(FfNode *root_nd)
     }
     else if(curr_nd->type == node_id) {
       if (s_dt) {
-        printf("id:%s\t", curr_nd->node_val_id);
+        printf(" id:%s\t", curr_nd->node_val_id);
       }
       else {
         printf("%s ", curr_nd->node_val_id);
@@ -61,11 +61,11 @@ void print_list(FfNode *root_nd)
       if (s_dt) {
         s_indent /= 2;
       }
+      printf(")");
 
       if (curr_nd->next) {
         print_list(curr_nd->next);
       }
-      printf(")");
     }
   }
 }
