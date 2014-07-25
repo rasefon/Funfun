@@ -4,83 +4,120 @@ Funfun
 Minimal lisp
 
 $ ./funfun.exe sample.lisp
+
 Succeeded to parse file sample.lisp
 =================================================
-a
+(quote a)
+
+=> a
 
 eval count:0
 
 =================================================
-( a b c )
+(quote (a b c))
+
+=> ( a b c )
 
 eval count:1
 
 =================================================
-nil
+(quote ())
+
+=> nil
 
 eval count:2
 
 =================================================
-T
+(atom (quote a))
+
+=> T
 
 eval count:3
 
 =================================================
-F
+(atom (quote (a b c)))
+
+=> F
 
 eval count:4
 
 =================================================
-T
+(atom (quote ()))
+
+=> T
 
 eval count:5
 
 =================================================
-T
+(eq (quote a) (quote a))
+
+=> T
 
 eval count:6
 
 =================================================
-F
+(eq (quote a) (quote b))
+
+=> F
 
 eval count:7
 
 =================================================
-T
+(eq (quote ()) (quote ()))
+
+=> T
 
 eval count:8
 
 =================================================
-F
+(eq (quote (a b)) (quote (a b)))
+
+=> F
 
 eval count:9
 
 =================================================
-a
+(car (quote (a b c)))
+
+=> a
 
 eval count:10
 
 =================================================
-( b c )
+(cdr (quote (a b c)))
+
+=> ( b c )
 
 eval count:11
 
 =================================================
-( a b c )
+(cons (quote a) (quote (b c)))
+
+=> ( a b c )
 
 eval count:12
 
 =================================================
-a
+(car (cons (quote a) (quote (b c))))
+
+=> a
 
 eval count:13
 
 =================================================
-( b c )
+(cdr (cons (quote a) (quote (b c))))
+
+=> ( b c )
 
 eval count:14
 
 =================================================
-second
+(cond
+  ((eq (quote a) (quote b))
+   (quote first))
+  ((atom (quote a))
+   (quote second)))
+
+=> second
 
 eval count:15
